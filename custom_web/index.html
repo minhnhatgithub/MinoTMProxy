@@ -2,16 +2,56 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>mitmproxy Pro — Traffic Inspector</title>
+        <title>MinoTMProxy // Cybernetic Traffic Inspector</title>
         <link rel="icon" href="static/favicon.ico" type="image/x-icon" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        
+        <!-- High-Tech Typography (JetBrains Mono & Inter) -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
         <script type="module" crossorigin src="./static/index-Be7e-cwP.js"></script>
         <link rel="modulepreload" crossorigin href="./static/vendor-BS4xPthR.js">
         <link rel="stylesheet" crossorigin href="./static/vendor-Cg3S-P9H.css">
         <link rel="stylesheet" crossorigin href="./static/index-DhPPoJ7G.css">
-        <link rel="stylesheet" crossorigin href="./static/modern-pro.css?v=4">
+        <link rel="stylesheet" crossorigin href="./static/modern-pro.css?v=20261017_REV6">
+        
+        <!-- MinoTM Theme & Control Handler (External static script to conform with strict CSP) -->
+        <script src="./static/theme.js?v=20261017_REV6"></script>
     </head>
     <body>
+        <!-- Cybernetic System Header (Inspired by TNKRE.DEV // DECOMPILE) -->
+        <div id="cyber-topbar">
+            <div class="topbar-left">
+                <div class="brand-box">M</div>
+                <div class="brand-text">
+                    <div class="brand-title">MINOTMPROXY <span class="cyber-slash">//</span> INSPECTOR</div>
+                    <div class="brand-subtitle">CYBERNETIC TRAFFIC LAB &bull; KERNEL v12.2</div>
+                </div>
+                <div class="status-pill pill-online" title="Proxy listener active on port 8080">
+                    <span class="pulse-dot"></span>
+                    <span class="pill-label">CORE ONLINE (8080)</span>
+                </div>
+                <div class="status-pill pill-meta">
+                    <span class="pill-label">HTTP/2 &bull; TLS 1.3 &bull; MITM</span>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <button id="theme-switch-btn" class="cyber-btn cyber-btn-amber" title="Chuyển đổi giao diện Cyber Dark / Light Mode (Phím tắt: Alt+T)">
+                    <span class="btn-icon">🌓</span>
+                    <span class="btn-text">THEME: <strong id="theme-name">CYBER</strong></span>
+                </button>
+                <a href="http://mitm.it" target="_blank" class="cyber-btn cyber-btn-cyan" title="Tải & Cài đặt chứng chỉ SSL CA cho thiết bị">
+                    <span class="btn-text">CERT [mitm.it] ↗</span>
+                </a>
+                <button id="btn-quick-resume" class="cyber-btn cyber-btn-emerald" title="Tiếp tục toàn bộ request bị chặn (Resume All)">
+                    <span class="btn-text">RESUME ALL</span>
+                </button>
+                <div class="brand-badge">v12.2 PRO</div>
+            </div>
+        </div>
+
         <div id="mitmproxy"></div>
     </body>
 </html>

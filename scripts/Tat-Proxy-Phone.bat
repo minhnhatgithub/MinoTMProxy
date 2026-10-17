@@ -10,7 +10,7 @@ echo.
 
 where adb >nul 2>nul
 if %errorlevel% neq 0 (
-    echo [!] Khong tim thay ADB. Vui long vao Cai dat Wi-Fi tren dien thoai va tat Proxy thu cong (Chon None/Khong co).
+    echo [!] Khong tim thay ADB. Vui long vao Cai dat Wi-Fi tren dien thoai va tat Proxy thu cong [Chon None hoac Khong co].
     pause
     exit /b 0
 )

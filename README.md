@@ -13,15 +13,19 @@
 
 ## ✨ Điểm nổi bật của MinoTMProxy
 
-- **⚡ 1-Click Khởi chạy (`Start-MinoTMProxy.bat`):** Tự động phát hiện môi trường, tự cài đặt thư viện thiếu, tự động patch giao diện Dark Pro và mở trình duyệt trực tiếp.
-- **🎨 Giao diện Dark Theme Pro:** Lấy cảm hứng từ Linear, GitHub Dark và Chrome DevTools. Tông màu sâu êm mắt (`#0b0e14`), font monospaced JetBrains sắc sảo, độ tương phản cao, làm việc ban đêm không mỏi mắt.
-- **🛠️ Đã sửa triệt để các lỗi giao diện gốc:**
+- **⚡ 1-Click Khởi chạy Tự Phục Hồi (`Start-MinoTMProxy.bat`):** Tự động phát hiện môi trường Python, tự cài đặt thư viện thiếu. Nếu máy thiếu Python hoặc gặp lỗi thư viện C++, tool tự động tải môi trường Python 3.12 độc lập siêu tốc qua `uv` và chạy ngay không cần cài đặt gì thêm.
+- **🎨 Giao diện Dual-Mode Siêu Đẹp (Cyber Dark / Light Tech):**
+  - **Cyber Dark Enclave (Mặc định):** Tông màu không gian sâu (`#07090e`), neon cyan/emerald phát sáng tinh tế, font JetBrains Mono sắc nét.
+  - **Light Tech Laboratory:** Chế độ sáng sang trọng, độ tương phản cao, dịu mắt và chuyên nghiệp.
+  - Chuyển đổi 1 chạm bằng nút trên thanh công cụ hoặc phím tắt **`Alt + T`**.
+- **🛠️ Tối ưu hóa Ribbon & Thanh Công Cụ Chuẩn DevTools:**
+  - Đồng bộ chiều cao chuẩn `32px` cho tất cả các ô nhập (`Search`, `Highlight`, `Intercept`) và nút hành động (`Resume All`).
+  - Thanh thao tác Flow (Replay, Duplicate, Revert, Delete, Mark, Download, Export, Resume, Abort) dạng thanh ngang hiện đại, không bị nhảy khung.
+  - Nút **Quickaction** (Replay/Resume ở cuối dòng) chuyển màu hover êm ái (`#e0f2fe` ở Light Mode, neon cyan ở Dark Mode), không bị chữ đen xì.
   - Khử 100% lỗi **Headers Clipping** & **Nested Scrollbars** (giá trị Cookie, CSP, Token dài tự xuống dòng mượt mà).
-  - Khắc phục lỗi che khuất nút **Quickactions** (nút Replay / Resume có ô chuyên dụng `38px`, căn giữa sắc nét).
-  - Bảng tra cứu Status Code có màu ngọc lục bảo (`200 OK`), hổ phách (`3xx Redirect`) và đỏ san hô (`4xx/5xx Error`) rực rỡ.
-  - Splitter phân chia bảng luồng và bảng chi tiết mượt mà, dễ kéo thả.
-- **📱 Hỗ trợ đầy đủ cho Điện thoại (Android & iOS):** Tự động nhận diện địa chỉ IP mạng LAN của máy tính, cung cấp sẵn script bật/tắt proxy nhanh qua cáp ADB.
-- **🔐 Đi kèm bộ chứng chỉ CA & Script Root:** Tích hợp sẵn chứng chỉ CA và script đẩy chứng chỉ vào hệ thống `/system/etc/security/cacerts/` cho máy Android đã root.
+  - Bảng tra cứu Status Code có màu ngọc lục bảo (`200 OK`), hổ phách (`3xx Redirect`) và đỏ san hô (`4xx/5xx Error`) sắc nét.
+- **📱 Hỗ trợ đầy đủ cho Điện thoại (Android & iOS):** Tự động nhận diện chính xác địa chỉ IP LAN thật của máy tính (bỏ qua card mạng ảo), cung cấp sẵn script bật/tắt proxy nhanh qua cáp ADB.
+- **🔐 Tự Động Đồng Bộ & Cài Đặt Chứng Chỉ CA:** Tự động đồng bộ chứng chỉ SSL riêng của từng máy tính và hỗ trợ 1 chạm cài thẳng vào hệ thống `/system/etc/security/cacerts/` cho máy Android đã root.
 
 ---
 
@@ -30,21 +34,24 @@
 ```text
 MinoTMProxy/
 │
-├── Start-MinoTMProxy.bat       # [CLICK VÀO ĐÂY] Khởi động tool 1 chạm
-├── requirements.txt            # Danh sách thư viện phụ thuộc
+├── Start-MinoTMProxy.bat       # [CLICK VÀO ĐÂY] Khởi động tool 1 chạm tự động hoàn toàn
+├── requirements.txt            # Khai báo thư viện mitmproxy
 ├── README.md                   # Hướng dẫn sử dụng chi tiết
 │
-├── custom_web/                 # Gói giao diện Dark Pro tùy biến
+├── custom_web/                 # Gói giao diện Cyber / Light tùy biến
 │   ├── modern-pro.css          # Master stylesheet tùy biến giao diện
-│   ├── index.html              # Entry point HTML đã tích hợp theme
+│   ├── index.html              # Entry point HTML tích hợp topbar và theme
+│   ├── theme.js                # Xử lý đổi theme (Alt+T) và Resume All
 │   └── apply_theme.py          # Script tự động gắn theme vào mitmproxy
 │
 ├── scripts/                    # Bộ công cụ hỗ trợ proxy nhanh
 │   ├── Bat-Proxy-Phone.bat     # Bật proxy trên điện thoại tự động qua ADB
-│   ├── Tat-Proxy-Phone.bat     # Tắt proxy trên điện thoại
+│   ├── Tat-Proxy-Phone.bat     # Tắt proxy trên điện thoại qua ADB
 │   ├── Bat-Proxy-Windows.bat   # Bật proxy hệ thống Windows
 │   ├── Tat-Proxy-Windows.bat   # Tắt proxy hệ thống Windows
-│   └── Cai-Cert-Android-Root.bat # Cài chứng chỉ CA vào Android /system (Root)
+│   ├── Cai-Cert-Android-Root.bat # Cài chứng chỉ CA vào Android /system (Root)
+│   ├── get_ip.py               # Tự động dò IP LAN chính xác của máy tính
+│   └── sync_certs.py           # Tự động đồng bộ và nạp chứng chỉ CA qua ADB
 │
 └── certificates/               # Thư mục chứng chỉ SSL/CA
     ├── mitmproxy-ca-cert.cer   # Chứng chỉ cho Windows / Android User
