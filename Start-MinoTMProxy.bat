@@ -78,17 +78,41 @@ if exist "%~dp0scripts\get_ip.py" (
 )
 if "%LAN_IP%"=="" set LAN_IP=127.0.0.1
 
+:: 4. Kiem tra va tu dong ho tro thiet bi ADB (Neu co)
+set "ADB_DEVICE="
+where adb >nul 2>nul
+if %errorlevel% equ 0 (
+    for /f "tokens=1,2" %%A in ('adb devices ^| findstr /v "List of devices"') do (
+        if "%%B"=="device" (
+            set "ADB_DEVICE=%%A"
+        )
+    )
+)
+
 echo.
 echo ======================================================================
 echo  [✓] GIAO DIEN WEB UI : http://127.0.0.1:8081/?token=123
 echo  [✓] MAT KHAU WEB     : 123
-echo  [✓] PROXY CHO PHONE  : %LAN_IP%:8080
+echo  [✓] PROXY LISTENER   : 0.0.0.0:8080 (IP LAN: %LAN_IP%)
+echo ======================================================================
+
+if defined ADB_DEVICE (
+    adb reverse tcp:8080 tcp:8080 >nul 2>&1
+    adb shell settings put global http_proxy 127.0.0.1:8080 >nul 2>&1
+    echo  [⚡] PHAT HIEN DIEN THOAI ANDROID QUA CAP USB (ADB: %ADB_DEVICE%)!
+    echo      -^> Da TU DONG bat Reverse Port ^& Global Proxy (127.0.0.1:8080)!
+    echo      -^> Mo App / Web tren dien thoai la request se hien ngay tren Web UI!
+    echo      -^> Khi nao muon tat proxy tren phone: Chay scripts\Tat-Proxy-Phone.bat
+) else (
+    echo  (*) Cach bat request tu DIEN THOAI (Android / iOS):
+    echo      - Cach 1: Vao Wi-Fi -^> Sua mang -^> Proxy Thu cong:
+    echo        + Server : %LAN_IP%
+    echo        + Port   : 8080
+    echo      - Cach 2: Cam cap USB bat 'Go loi USB' roi chay scripts\Bat-Proxy-Phone.bat
+)
 echo.
-echo  (*) De bat proxy tren dien thoai:
-echo      - Vao Cai dat Wifi -^> Chinh sua mang -^> Proxy Thu cong:
-echo        + Ten may chu proxy: %LAN_IP%
-echo        + Cong             : 8080
-echo      - Hoac chay file: scripts\Bat-Proxy-Phone.bat [neu co cap ADB]
+echo  (*) Cach bat request tren TRINH DUYET MAY TINH (PC):
+echo      -^> Chay file: scripts\Bat-Proxy-Windows.bat (De tat: scripts\Tat-Proxy-Windows.bat)
 echo ======================================================================
 echo.
 
@@ -98,5 +122,11 @@ start http://127.0.0.1:8081/?token=123
 :: 6. Khởi động mitmweb (Tự động giải phóng cổng 8080/8081 nếu còn tiến trình cũ)
 powershell -NoProfile -ExecutionPolicy Bypass -Command "try { Get-NetTCPConnection -LocalPort 8080,8081 -State Listen -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue } } catch {}; exit 0" >nul 2>&1
 "%MITM_CMD%" --web-host 127.0.0.1 --web-port 8081 --listen-host 0.0.0.0 --listen-port 8080 --set block_global=false --set web_password=123
+
+if defined ADB_DEVICE (
+    adb shell settings put global http_proxy :0 >nul 2>&1
+    adb reverse --remove tcp:8080 >nul 2>&1
+    echo [*] Da tu dong tat proxy va khoi phuc mang binh thuong cho dien thoai.
+)
 
 pause

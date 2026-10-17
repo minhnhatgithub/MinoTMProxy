@@ -17,6 +17,7 @@ if %errorlevel% neq 0 (
 
 echo [*] Dang gui lenh tat proxy qua ADB...
 adb shell settings put global http_proxy :0
+adb reverse --remove tcp:8080 >nul 2>&1
 
 echo.
 echo [✓] DA TAT PROXY CHO DIEN THOAI THANH CONG!

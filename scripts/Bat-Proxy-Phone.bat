@@ -35,11 +35,19 @@ if %errorlevel% neq 0 (
     exit /b 0
 )
 
-echo [*] Dang gui lenh bat proxy qua ADB...
-adb shell settings put global http_proxy %LAN_IP%:8080
+echo [*] Dang thiet lap Reverse Port qua cap USB (bo qua moi van de Wi-Fi / Firewall)...
+adb reverse tcp:8080 tcp:8080 >nul 2>&1
+
+echo [*] Dang gui lenh bat proxy qua ADB (127.0.0.1:8080)...
+adb shell settings put global http_proxy 127.0.0.1:8080
 
 echo.
-echo [✓] DA BAT PROXY THANH CONG!
-echo Toan bo request tren dien thoai bay gio se di qua MinoTMProxy (%LAN_IP%:8080).
+echo ========================================================
+echo [✓] DA BAT PROXY THANH CONG CHO DIEN THOAI!
+echo Toan bo request tren dien thoai (App, Game, Web) bay gio se di qua MinoTMProxy.
+echo.
+echo (*) Luu y: Khi khong dung nua, hay chay file:
+echo     scripts\Tat-Proxy-Phone.bat de khoi phuc mang binh thuong.
+echo ========================================================
 echo.
 pause
