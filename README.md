@@ -34,9 +34,8 @@
 ```text
 MinoTMProxy/
 │
-├── main.py                     # [KHUYÊN DÙNG] Khởi chạy trực tiếp bằng Python với Live Request Log siêu rõ ràng
+├── main.py                     # [KHỞI CHẠY] Chạy trực tiếp bằng Python với Live Request Log siêu rõ ràng
 ├── run.py                      # Alias ngắn gọn của main.py (python run.py)
-├── Start-MinoTMProxy.bat       # Khởi động tool 1 chạm bằng file .bat cho Windows
 ├── requirements.txt            # Khai báo thư viện mitmproxy
 ├── README.md                   # Hướng dẫn sử dụng chi tiết
 │
@@ -46,17 +45,13 @@ MinoTMProxy/
 │   ├── theme.js                # Xử lý đổi theme (Alt+T) và Resume All
 │   └── apply_theme.py          # Script tự động gắn theme vào mitmproxy
 │
-├── scripts/                    # Bộ công cụ hỗ trợ proxy nhanh (Python & BAT)
+├── scripts/                    # Bộ công cụ hỗ trợ proxy nhanh (100% Python)
 │   ├── terminal_logger.py      # Bộ lọc in log request/response trực tiếp siêu rõ ràng trên console
-│   ├── Bat-Proxy-Phone.py      # Bật proxy trên điện thoại tự động qua ADB (Python)
-│   ├── Tat-Proxy-Phone.py      # Tắt proxy trên điện thoại qua ADB (Python)
-│   ├── Bat-Proxy-Windows.py    # Bật proxy hệ thống Windows (Python, áp dụng ngay tức thì)
-│   ├── Tat-Proxy-Windows.py    # Tắt proxy hệ thống Windows (Python)
-│   ├── Bat-Proxy-Phone.bat     # Bật proxy điện thoại (file .bat)
-│   ├── Tat-Proxy-Phone.bat     # Tắt proxy điện thoại (file .bat)
-│   ├── Bat-Proxy-Windows.bat   # Bật proxy Windows (file .bat)
-│   ├── Tat-Proxy-Windows.bat   # Tắt proxy Windows (file .bat)
-│   ├── Cai-Cert-Android-Root.bat # Cài chứng chỉ CA vào Android /system (Root)
+│   ├── Bat-Proxy-Phone.py      # Bật proxy trên điện thoại tự động qua ADB
+│   ├── Tat-Proxy-Phone.py      # Tắt proxy trên điện thoại qua ADB
+│   ├── Bat-Proxy-Windows.py    # Bật proxy hệ thống Windows (áp dụng ngay tức thì)
+│   ├── Tat-Proxy-Windows.py    # Tắt proxy hệ thống Windows
+│   ├── Cai-Cert-Android-Root.py # Cài chứng chỉ CA vào Android /system (Root)
 │   ├── get_ip.py               # Tự động dò IP LAN chính xác của máy tính
 │   └── sync_certs.py           # Tự động đồng bộ và nạp chứng chỉ CA qua ADB
 │
@@ -71,19 +66,17 @@ MinoTMProxy/
 
 ## 🚀 Hướng dẫn sử dụng nhanh (Quick Start)
 
-### Cách 1: Khởi chạy bằng Python (Khuyên Dùng — Log CMD Siêu Rõ Ràng)
+### Bước 1: Khởi động công cụ
 Mở cửa sổ dòng lệnh và chạy:
 ```bash
 python main.py
 # hoặc:
 python run.py
 ```
-- Tool sẽ tự động nhận diện điện thoại Android cắm cáp USB (ADB) và tự động bật proxy.
+- Tool sẽ tự động kiểm tra và cấu hình môi trường.
+- Tự động nhận diện điện thoại Android cắm cáp USB (ADB) và tự động bật proxy.
 - Trình duyệt tự mở trang Web UI tại: **`http://127.0.0.1:8081/?token=123`** (Mật khẩu: `123`).
 - Toàn bộ request/response sẽ được **in trực tiếp theo thời gian thực (Live Request Log)** trên cửa sổ CMD cực kỳ rõ ràng, kèm thời gian, HTTP method, status code và URL!
-
-### Cách 2: Khởi chạy 1-Click bằng file `.bat`
-Nhấp đúp chuột vào file **`Start-MinoTMProxy.bat`**.
 
 ---
 
@@ -107,7 +100,7 @@ Nhấp đúp chuột vào file **`Start-MinoTMProxy.bat`**.
   - **Với iPhone:** Tải hồ sơ -> Vào Cài đặt -> Cài đặt hồ sơ -> Vào *Cài đặt chung > Giới thiệu > Cài đặt tin cậy chứng nhận* -> Bật **Tin cậy toàn bộ** cho mitmproxy.
   - **Với Android thường:** Tải file `.cer` về -> Vào *Cài đặt > Bảo mật > Chứng chỉ CA* -> Cài đặt file vừa tải.
   - **Với Android đã Root (bắt 100% app không bị chặn SSL):** 
-    - Chạy script `scripts\Cai-Cert-Android-Root.bat`.
+    - Chạy script: `python scripts/Cai-Cert-Android-Root.py`.
     - Hoặc cài Magisk Module **MagiskTrustUserCerts** / **AlwaysTrustUserCerts**.
     - Nếu app có SSL Pinning: Cài thêm **LSPosed** + module **TrustMeAlready** hoặc bypass bằng Frida.
 
@@ -115,14 +108,14 @@ Nhấp đúp chuột vào file **`Start-MinoTMProxy.bat`**.
 
 ### Bước 3: Bắt gói tin trên Máy tính (Windows PC)
 - Muốn bắt request từ trình duyệt hoặc ứng dụng trên máy tính:
-  - Chạy file: `python scripts/Bat-Proxy-Windows.py` (hoặc click `scripts\Bat-Proxy-Windows.bat`).
+  - Chạy file: `python scripts/Bat-Proxy-Windows.py`.
   - Cài đặt chứng chỉ gốc bằng cách nhấp đúp file `certificates\mitmproxy-ca-cert.cer` -> Cài vào mục **Trusted Root Certification Authorities**.
-- Khi xong việc, chỉ cần chạy: `python scripts/Tat-Proxy-Windows.py` (hoặc `scripts\Tat-Proxy-Windows.bat`).
+- Khi xong việc, chỉ cần chạy: `python scripts/Tat-Proxy-Windows.py`.
 
 ---
 
 ## 🛠️ Quản lý & Tắt Proxy khi không sử dụng
-- **Tắt proxy trên điện thoại:** Chạy `python scripts/Tat-Proxy-Phone.py` (hoặc `scripts\Tat-Proxy-Phone.bat`).
+- **Tắt proxy trên điện thoại:** Chạy `python scripts/Tat-Proxy-Phone.py`.
 - **Dừng công cụ:** Nhấn **`Ctrl + C`** trên cửa sổ CMD. Tool sẽ tự động tắt proxy trên điện thoại trước khi thoát.
 
 ---
