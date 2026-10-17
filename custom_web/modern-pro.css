@@ -1,0 +1,1386 @@
+/* ==========================================================================
+   MITMPROXY WEB — MASTER DESIGN SYSTEM & MODERN UI/UX REDESIGN
+   Inspired by Linear, GitHub Dark, Chrome DevTools, Proxyman, Reqable Pro
+   ========================================================================== */
+
+:root {
+    /* Surface & Background Hierarchy */
+    --app-bg: #0b0e14;
+    --panel-bg: #11151c;
+    --surface-primary: #161b22;
+    --surface-secondary: #1c2128;
+    --surface-hover: #22272e;
+    --surface-active: #2d333b;
+    --surface-selected: #1f365d;
+    --surface-selected-hover: #23406f;
+
+    /* Borders & Dividers */
+    --border-subtle: #21262d;
+    --border-default: #30363d;
+    --border-strong: #444c56;
+    --border-selected: #388bfd;
+
+    /* Typography & Contrast */
+    --text-primary: #f0f6fc;
+    --text-secondary: #adbac7;
+    --text-muted: #768390;
+    --text-inverse: #ffffff;
+    --text-on-selected: #ffffff;
+
+    /* Semantic Accent Colors */
+    --accent: #58a6ff;
+    --accent-hover: #79c0ff;
+    --accent-glow: rgba(88, 166, 255, 0.15);
+
+    --status-success: #3fb950;
+    --status-success-bg: rgba(63, 185, 80, 0.15);
+    --status-info: #58a6ff;
+    --status-info-bg: rgba(88, 166, 255, 0.15);
+    --status-warning: #d29922;
+    --status-warning-bg: rgba(210, 153, 34, 0.15);
+    --status-error: #f85149;
+    --status-error-bg: rgba(248, 81, 73, 0.15);
+
+    /* Header Keys */
+    --header-key: #79c0ff;
+    --header-colon: #6e7681;
+
+    /* Font Families */
+    --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, Monaco, 'Courier New', monospace;
+}
+
+/* Base resets & theme */
+html, body {
+    background-color: var(--app-bg) !important;
+    color: var(--text-primary) !important;
+    font-family: var(--font-ui) !important;
+    color-scheme: dark !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+#mitmproxy {
+    background-color: var(--app-bg) !important;
+}
+
+/* ==========================================================================
+   1. TOP NAVIGATION & RIBBON TOOLBAR
+   ========================================================================== */
+
+header {
+    background-color: var(--surface-primary) !important;
+    border-bottom: 1px solid var(--border-default) !important;
+    padding-top: 0 !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Top Menu Tabs (File, Capture, Flow List, Options, Flow) */
+header .nav-tabs {
+    background-color: var(--surface-primary) !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+    padding: 2px 8px 0 !important;
+    margin-bottom: 0 !important;
+}
+
+header .nav-tabs > li > a {
+    color: var(--text-secondary) !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 4px 4px 0 0 !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    padding: 6px 14px !important;
+    transition: all 0.12s ease !important;
+}
+
+header .nav-tabs > li > a:hover {
+    color: var(--text-primary) !important;
+    background-color: var(--surface-secondary) !important;
+}
+
+header .nav-tabs > li.active > a,
+header .nav-tabs > li.active > a:focus,
+header .nav-tabs > li.active > a:hover {
+    background-color: var(--panel-bg) !important;
+    color: var(--accent) !important;
+    border: none !important;
+    border-bottom: 2px solid var(--accent) !important;
+    font-weight: 600 !important;
+}
+
+/* Action Ribbon Bar */
+header > div:not(:empty) {
+    background-color: var(--panel-bg) !important;
+    border-bottom: 1px solid var(--border-default) !important;
+    height: 82px !important;
+    padding: 4px 8px !important;
+}
+
+.menu-group {
+    border-right: 1px solid var(--border-subtle) !important;
+    padding: 0 10px !important;
+    margin: 0 !important;
+    height: 74px !important;
+}
+
+.menu-legend {
+    color: var(--text-muted) !important;
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.8px !important;
+    text-align: center !important;
+    margin-top: 2px !important;
+}
+
+.menu-content {
+    height: 52px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 3px !important;
+}
+
+.menu-content > .btn,
+.menu-content > a > .btn {
+    height: 50px !important;
+    background-color: transparent !important;
+    color: var(--text-secondary) !important;
+    border: 1px solid transparent !important;
+    border-radius: 6px !important;
+    padding: 6px 10px !important;
+    font-size: 11.5px !important;
+    font-weight: 500 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 3px !important;
+    transition: all 0.15s ease !important;
+}
+
+.menu-content > .btn i,
+.menu-content > a > .btn i {
+    font-size: 16px !important;
+    margin: 0 !important;
+    color: var(--accent) !important;
+}
+
+.menu-content > .btn:hover,
+.menu-content > a > .btn:hover {
+    background-color: var(--surface-secondary) !important;
+    border-color: var(--border-default) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Destructive actions in ribbon (Delete, Abort) */
+.menu-content > .btn .fa-trash,
+.menu-content > .btn .fa-times,
+.menu-content > a > .btn .fa-trash,
+.menu-content > a > .btn .fa-times {
+    color: var(--status-error) !important;
+}
+.menu-content > .btn:hover .fa-trash,
+.menu-content > .btn:hover .fa-times,
+.menu-content > a > .btn:hover .fa-trash,
+.menu-content > a > .btn:hover .fa-times {
+    filter: drop-shadow(0 0 4px rgba(248, 81, 73, 0.4));
+}
+
+/* Play/Resume in ribbon */
+.menu-content > .btn .fa-play,
+.menu-content > a > .btn .fa-play {
+    color: var(--status-success) !important;
+}
+
+/* Replay in ribbon */
+.menu-content > .btn .fa-repeat,
+.menu-content > a > .btn .fa-repeat {
+    color: var(--accent) !important;
+}
+
+/* ==========================================================================
+   1.1 CONFIGURATION & QUICK OPTIONS (REGION B)
+   ========================================================================== */
+
+/* Menu Entries (Checkboxes, Quick Options, View Options) */
+.menu-entry {
+    display: inline-flex !important;
+    align-items: center !important;
+    height: 24px !important;
+    padding: 2px 8px !important;
+    margin: 1px 3px !important;
+    border-radius: 5px !important;
+    background-color: var(--surface-primary) !important;
+    border: 1px solid var(--border-subtle) !important;
+    transition: all 0.12s ease !important;
+    cursor: pointer !important;
+}
+
+.menu-entry:hover {
+    background-color: var(--surface-hover) !important;
+    border-color: var(--border-default) !important;
+}
+
+.menu-entry label {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    font-size: 11.5px !important;
+    font-weight: 500 !important;
+    color: var(--text-secondary) !important;
+    margin: 0 !important;
+    cursor: pointer !important;
+    user-select: none !important;
+    white-space: nowrap !important;
+}
+
+.menu-entry:hover label {
+    color: var(--text-primary) !important;
+}
+
+/* Custom Modern Checkbox Toggle */
+.menu-entry input[type="checkbox"] {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    width: 14px !important;
+    height: 14px !important;
+    background-color: var(--surface-secondary) !important;
+    border: 1px solid var(--border-default) !important;
+    border-radius: 3px !important;
+    margin: 0 !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+    transition: all 0.15s ease !important;
+    flex-shrink: 0 !important;
+}
+
+.menu-entry input[type="checkbox"]:hover {
+    border-color: var(--accent) !important;
+}
+
+.menu-entry input[type="checkbox"]:checked {
+    background-color: var(--accent) !important;
+    border-color: var(--accent) !important;
+}
+
+.menu-entry input[type="checkbox"]:checked::after {
+    content: "✓" !important;
+    color: #ffffff !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+}
+
+/* Doc/Help Link icons in menu entry */
+.menu-entry a {
+    color: var(--text-muted) !important;
+    margin-left: 4px !important;
+    font-size: 11px !important;
+    opacity: 0.65 !important;
+    transition: all 0.12s ease !important;
+    text-decoration: none !important;
+}
+
+.menu-entry a:hover {
+    opacity: 1 !important;
+    color: var(--accent) !important;
+}
+
+/* ==========================================================================
+   1.2 POPOVERS, AUTOCOMPLETE & COMMAND SUGGESTIONS
+   ========================================================================== */
+
+.popover {
+    background-color: var(--surface-primary) !important;
+    border: 1px solid var(--border-default) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.65) !important;
+    color: var(--text-primary) !important;
+    font-family: var(--font-ui) !important;
+    padding: 6px !important;
+    z-index: 1050 !important;
+}
+
+.popover.top > .arrow::after {
+    border-top-color: var(--surface-primary) !important;
+}
+.popover.bottom > .arrow::after {
+    border-bottom-color: var(--surface-primary) !important;
+}
+.popover.left > .arrow::after {
+    border-left-color: var(--surface-primary) !important;
+}
+.popover.right > .arrow::after {
+    border-right-color: var(--surface-primary) !important;
+}
+
+.popover-title {
+    background-color: var(--surface-secondary) !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+    color: var(--text-primary) !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    border-radius: 6px 6px 0 0 !important;
+    padding: 6px 10px !important;
+}
+
+.popover-content {
+    padding: 6px 10px !important;
+    color: var(--text-secondary) !important;
+    font-size: 12px !important;
+}
+
+/* Command Bar */
+.command-title {
+    background-color: var(--surface-secondary) !important;
+    border: 1px solid var(--border-default) !important;
+    border-radius: 4px 4px 0 0 !important;
+    color: var(--accent) !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.6px !important;
+    padding: 4px 8px !important;
+}
+
+.command-result {
+    background-color: var(--app-bg) !important;
+    border: 1px solid var(--border-default) !important;
+    border-top: none !important;
+    border-radius: 0 0 6px 6px !important;
+    color: var(--text-primary) !important;
+    font-family: var(--font-mono) !important;
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+    padding: 8px 12px !important;
+}
+
+.command-suggestion {
+    background-color: var(--surface-hover) !important;
+    color: var(--text-primary) !important;
+    border-radius: 3px !important;
+    padding: 2px 6px !important;
+}
+
+.argument-suggestion {
+    background-color: var(--surface-selected) !important;
+    color: var(--accent-hover) !important;
+    border-radius: 3px !important;
+    padding: 2px 6px !important;
+}
+
+.available-commands {
+    background-color: var(--surface-primary) !important;
+    border: 1px solid var(--border-default) !important;
+    border-radius: 6px !important;
+    color: var(--text-secondary) !important;
+    font-family: var(--font-mono) !important;
+    font-size: 12px !important;
+}
+
+/* ==========================================================================
+   2. MAIN VIEW & SPLITTER (REGION C)
+   ========================================================================== */
+
+.mainview, .main-view {
+    background-color: var(--app-bg) !important;
+}
+
+/* Resizable Splitter (Region C Divider) */
+.splitter, .splitter-x, .splitter-y {
+    background-color: var(--border-default) !important;
+    flex: 0 0 5px !important;
+    width: 5px !important;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease !important;
+    z-index: 15 !important;
+    position: relative !important;
+}
+
+.splitter.splitter-x {
+    cursor: col-resize !important;
+}
+
+.splitter.splitter-y {
+    cursor: row-resize !important;
+}
+
+.splitter:hover, .splitter:active, .splitter-x:hover, .splitter-x:active {
+    background-color: var(--accent) !important;
+    box-shadow: 0 0 6px var(--accent-glow) !important;
+}
+
+.splitter > div {
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: -4px !important;
+    right: -4px !important;
+    z-index: 16 !important;
+}
+
+/* ==========================================================================
+   3. FLOW TABLE (NETWORK TRAFFIC TABLE)
+   Layout-Safe: strict 32px row height preserved for React Virtual Scroller
+   ========================================================================== */
+
+.flow-table {
+    background-color: var(--panel-bg) !important;
+}
+
+.flow-table table {
+    background-color: var(--panel-bg) !important;
+    color: var(--text-primary) !important;
+    border-collapse: collapse !important;
+}
+
+/* Header Row */
+.flow-table thead tr {
+    background-color: var(--surface-primary) !important;
+    border-bottom: 2px solid var(--border-default) !important;
+    height: 32px !important;
+    line-height: 32px !important;
+}
+
+.flow-table thead th {
+    background-color: var(--surface-primary) !important;
+    color: var(--text-muted) !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.6px !important;
+    border: none !important;
+    border-bottom: 2px solid var(--border-default) !important;
+    padding: 0 8px !important;
+}
+
+/* Table Column Widths & Alignments */
+.flow-table .col-method {
+    width: 72px !important;
+    text-align: center !important;
+}
+
+.flow-table .col-status {
+    width: 62px !important;
+    text-align: center !important;
+}
+
+.flow-table .col-size {
+    width: 75px !important;
+    text-align: right !important;
+    padding-right: 12px !important;
+}
+
+.flow-table .col-time {
+    width: 65px !important;
+    text-align: right !important;
+    padding-right: 12px !important;
+}
+
+.flow-table th.col-path {
+    text-align: left !important;
+    padding-left: 10px !important;
+}
+
+/* Data Rows (Strictly 32px height) */
+.flow-table tbody tr {
+    background-color: var(--panel-bg) !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+    transition: background-color 0.1s ease !important;
+    cursor: pointer !important;
+}
+
+.flow-table tbody tr:nth-child(even) {
+    background-color: #0e1218 !important;
+}
+
+/* Hover Row */
+.flow-table tbody tr:hover {
+    background-color: var(--surface-hover) !important;
+}
+
+/* SELECTED ROW — DEEP NAVY BLUE WITH HIGH CONTRAST (Fixes unreadable light-blue) */
+.flow-table tr.selected,
+.flow-table tr.selected:nth-child(even),
+.flow-table tr.selected:nth-child(odd),
+.flow-table tr.selected.highlighted,
+.flow-table tbody tr.selected,
+div.flow-table table tbody tr.selected {
+    background-color: var(--surface-selected) !important;
+    border-left: 3px solid var(--accent) !important;
+    color: var(--text-on-selected) !important;
+}
+
+.flow-table tr.selected:hover {
+    background-color: var(--surface-selected-hover) !important;
+}
+
+/* High Contrast text in selected row */
+.flow-table tr.selected td,
+.flow-table tr.selected .col-path,
+.flow-table tr.selected .col-path a,
+.flow-table tr.selected .col-method,
+.flow-table tr.selected .col-status,
+.flow-table tr.selected .col-size,
+.flow-table tr.selected .col-time {
+    color: #ffffff !important;
+    font-weight: 500 !important;
+}
+
+.flow-table tr.selected .col-status {
+    color: var(--status-success) !important;
+    text-shadow: 0 0 8px rgba(63, 185, 80, 0.6) !important;
+}
+
+.flow-table tr.selected .col-method {
+    color: #79c0ff !important;
+    text-shadow: 0 0 8px rgba(88, 166, 255, 0.4) !important;
+}
+
+/* Column Content Formatting (Unselected) */
+.flow-table .col-path {
+    color: var(--text-primary) !important;
+    font-size: 12.5px !important;
+    padding-left: 6px !important;
+}
+
+/* Method Badges */
+.flow-table .col-method {
+    font-family: var(--font-mono) !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    color: var(--accent) !important;
+}
+
+/* Status Code Badges — High-Contrast Modern Semantic Palette */
+.flow-table .col-status {
+    font-family: var(--font-mono) !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    color: var(--status-success) !important;
+    letter-spacing: 0.4px !important;
+}
+
+/* Map inline colors (darkgreen, darkorange, darkred, default) to modern vibrant tokens */
+.flow-table td.col-status[style*="darkgreen"] {
+    color: #3fb950 !important;
+}
+
+.flow-table td.col-status[style*="darkorange"] {
+    color: #d29922 !important;
+}
+
+.flow-table td.col-status[style*="darkred"] {
+    color: #f85149 !important;
+}
+
+.flow-table td.col-status[style*="default"] {
+    color: #79c0ff !important;
+}
+
+/* Size and Time */
+.flow-table .col-size,
+.flow-table .col-time,
+.flow-table .col-timestamp {
+    color: var(--text-muted) !important;
+    font-family: var(--font-mono) !important;
+    font-size: 11.5px !important;
+}
+
+/* TLS Indicator */
+.flow-table .col-tls-https {
+    background-color: var(--status-success) !important;
+}
+
+/* Resource Icon: Clean Modern Micro-Badge */
+.flow-table .col-icon {
+    width: 28px !important;
+    text-align: center !important;
+}
+
+.resource-icon {
+    border-radius: 4px !important;
+    opacity: 0.85 !important;
+    transform: scale(0.8) !important;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5)) !important;
+}
+
+/* ==========================================================================
+   3.2 QUICK ACTION BUTTONS (REPLAY / RESUME)
+   Fixes: Quickaction was covered by adjacent cells or clipped due to width: 0
+   ========================================================================== */
+
+.flow-table th.col-quickactions,
+.flow-table td.col-quickactions {
+    width: 38px !important;
+    min-width: 38px !important;
+    max-width: 38px !important;
+    padding: 0 !important;
+    text-align: center !important;
+    direction: ltr !important;
+    overflow: visible !important;
+    vertical-align: middle !important;
+    position: relative !important;
+    z-index: 5 !important;
+}
+
+.flow-table tr:hover td.col-quickactions,
+.flow-table tr.selected td.col-quickactions {
+    z-index: 10 !important;
+}
+
+.flow-table .col-quickactions > div {
+    height: 32px !important;
+    width: 38px !important;
+    background: transparent !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    opacity: 0.65 !important;
+    transition: opacity 0.15s ease !important;
+}
+
+.flow-table tr:hover .col-quickactions > div,
+.flow-table tr.selected .col-quickactions > div {
+    opacity: 1 !important;
+}
+
+.flow-table .col-quickactions a.quickaction,
+.flow-table .col-quickactions > div > a {
+    width: 26px !important;
+    height: 26px !important;
+    margin: 0 !important;
+    border-radius: 6px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-color: var(--surface-primary) !important;
+    border: 1px solid var(--border-default) !important;
+    color: var(--accent) !important;
+    font-size: 12px !important;
+    text-decoration: none !important;
+    transition: all 0.15s ease !important;
+    cursor: pointer !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+.flow-table .col-quickactions a.quickaction:hover,
+.flow-table .col-quickactions > div > a:hover {
+    background-color: var(--accent) !important;
+    color: #ffffff !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 8px var(--accent-glow) !important;
+    transform: scale(1.08) !important;
+}
+
+/* Play/Resume Icon for Intercepted Flows */
+.flow-table .col-quickactions .fa-play {
+    color: var(--status-success) !important;
+    transform: translate(0.5px, 0px) !important;
+}
+.flow-table .col-quickactions a:hover .fa-play {
+    color: #ffffff !important;
+}
+
+/* Replay Icon */
+.flow-table .col-quickactions .fa-repeat {
+    color: var(--accent) !important;
+    transform: none !important;
+}
+.flow-table .col-quickactions a:hover .fa-repeat {
+    color: #ffffff !important;
+}
+
+/* ==========================================================================
+   4. FLOW DETAIL INSPECTOR (RIGHT PANE)
+   Fixes: Header concatenation, ugly white borders, giant status banner
+   ========================================================================== */
+
+.flow-detail {
+    background-color: var(--panel-bg) !important;
+    border-left: 1px solid var(--border-default) !important;
+    color: var(--text-primary) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+}
+
+/* Detail Navigation Bar (Request, Response, Connection, Timing, Comment) */
+.flow-detail nav {
+    background-color: var(--surface-primary) !important;
+    border-bottom: 1px solid var(--border-default) !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    flex-shrink: 0 !important;
+}
+
+.flow-detail .nav-tabs {
+    background-color: transparent !important;
+    border-bottom: none !important;
+    margin: 0 !important;
+    padding: 0 4px !important;
+    display: flex !important;
+    gap: 2px !important;
+}
+
+.flow-detail .nav-tabs > li > a {
+    color: var(--text-secondary) !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    padding: 10px 16px !important;
+    border-bottom: 2px solid transparent !important;
+    transition: all 0.15s ease !important;
+}
+
+.flow-detail .nav-tabs > li > a:hover {
+    color: var(--text-primary) !important;
+    background-color: var(--surface-secondary) !important;
+}
+
+/* Active Tab: Modern Underline Accent (Fixes ugly white rectangle on Response) */
+.flow-detail .nav-tabs > li.active > a,
+.flow-detail .nav-tabs > li.active > a:hover,
+.flow-detail .nav-tabs > li.active > a:focus {
+    color: var(--accent) !important;
+    background-color: var(--panel-bg) !important;
+    border: none !important;
+    border-bottom: 2px solid var(--accent) !important;
+}
+
+/* Close Button (Left of tabs) */
+.flow-detail .close-button {
+    background: transparent !important;
+    color: var(--text-muted) !important;
+    padding: 6px 12px !important;
+    font-size: 16px !important;
+    border: none !important;
+    transition: color 0.15s ease !important;
+}
+
+.flow-detail .close-button:hover {
+    color: var(--status-error) !important;
+}
+
+/* Detail Section Content Area — Master Vertical Scroll Container */
+.flow-detail section {
+    background-color: var(--panel-bg) !important;
+    padding: 14px 18px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    height: 100% !important;
+}
+
+/* Status Line (HTTP/2.0 200 Badge / GET /...) — Sleek Pill Banner */
+.flow-detail .first-line {
+    background-color: var(--surface-secondary) !important;
+    border: 1px solid var(--border-default) !important;
+    color: var(--accent) !important;
+    border-radius: 6px !important;
+    padding: 8px 14px !important;
+    margin: 0 0 14px 0 !important;
+    font-family: var(--font-mono) !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) !important;
+    word-break: break-all !important;
+    white-space: pre-wrap !important;
+}
+
+/* Divider lines in flow-detail */
+.flow-detail hr {
+    border: none !important;
+    border-top: 1px solid var(--border-default) !important;
+    margin: 16px 0 !important;
+}
+
+/* ==========================================================================
+   5. STRUCTURED TWO-COLUMN HTTP HEADERS INSPECTOR
+   Comprehensive Fixes:
+   - Elimination of row scrollbars (max-height: none, overflow: visible)
+   - Left-aligned key/value 2-column layout (minmax key width, auto value)
+   - Top-aligned key and value for multi-line values
+   - Full text wrapping for long cookies, tokens, CSP, reporting-endpoints
+   - Elimination of anonymous text node ": " via font-size: 0 on kv-row
+   ========================================================================== */
+
+.headers, .trailers {
+    background-color: var(--surface-primary) !important;
+    border: 1px solid var(--border-default) !important;
+    border-radius: 8px !important;
+    overflow: visible !important;
+    margin-bottom: 16px !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2) !important;
+    position: relative !important;
+}
+
+/* Two-Column Flex Row for Each Header — Natural Row Growth */
+.headers .kv-row,
+.trailers .kv-row {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    overflow-y: visible !important;
+    overflow-x: visible !important;
+    padding: 8px 14px !important;
+    margin: 0 !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+    background-color: var(--panel-bg) !important;
+    font-size: 0 !important;
+    transition: background-color 0.12s ease !important;
+}
+
+.headers .kv-row:nth-child(even),
+.trailers .kv-row:nth-child(even) {
+    background-color: var(--surface-secondary) !important;
+}
+
+.headers .kv-row:first-child,
+.trailers .kv-row:first-child {
+    border-top-left-radius: 7px !important;
+    border-top-right-radius: 7px !important;
+}
+
+.headers .kv-row:last-child,
+.trailers .kv-row:last-child {
+    border-bottom: none !important;
+    border-bottom-left-radius: 7px !important;
+    border-bottom-right-radius: 7px !important;
+}
+
+.headers .kv-row:hover,
+.trailers .kv-row:hover {
+    background-color: var(--surface-hover) !important;
+}
+
+/* Header Name (Key) — Left-aligned, Top-aligned, Distinct Cyan Color */
+.headers .kv-key,
+.trailers .kv-key {
+    font-size: 12px !important;
+    flex: 0 0 210px !important;
+    width: 210px !important;
+    min-width: 170px !important;
+    max-width: 240px !important;
+    text-align: left !important;
+    color: var(--header-key) !important;
+    font-weight: 600 !important;
+    font-family: var(--font-mono) !important;
+    line-height: 1.5 !important;
+    padding-right: 16px !important;
+    margin: 0 !important;
+    user-select: text !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    position: relative !important;
+}
+
+.headers .kv-key::after,
+.trailers .kv-key::after {
+    content: ":" !important;
+    color: var(--text-muted) !important;
+    position: absolute !important;
+    right: 6px !important;
+    top: 0 !important;
+    font-weight: 400 !important;
+}
+
+/* Header Value — Clean Monospace, Natural Height, Full Word Wrap, No Scrollbars */
+.headers .kv-value,
+.trailers .kv-value {
+    font-size: 12px !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    overflow-y: visible !important;
+    overflow-x: visible !important;
+    color: var(--text-primary) !important;
+    font-family: var(--font-mono) !important;
+    line-height: 1.5 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+    user-select: text !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* Inline Input Resets & Focus State */
+.headers .inline-input,
+.trailers .inline-input {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.headers .inline-input:focus,
+.trailers .inline-input:focus {
+    background-color: var(--surface-primary) !important;
+    outline: 1px solid var(--accent) !important;
+    box-shadow: 0 0 0 2px var(--accent-glow) !important;
+    border-radius: 4px !important;
+    padding: 1px 4px !important;
+}
+
+/* Add Row Button */
+.headers .kv-add-row,
+.trailers .kv-add-row {
+    color: var(--accent) !important;
+    padding: 6px 12px !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    opacity: 0.7 !important;
+    transition: opacity 0.15s ease !important;
+}
+
+.headers .kv-add-row:hover,
+.trailers .kv-add-row:hover {
+    opacity: 1 !important;
+    color: var(--accent-hover) !important;
+}
+
+/* Connection & Timing Details */
+.connection-table,
+.timing-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin-bottom: 16px !important;
+    background-color: var(--surface-primary) !important;
+    border: 1px solid var(--border-default) !important;
+    border-radius: 6px !important;
+    overflow: hidden !important;
+}
+
+.connection-table td,
+.timing-table td {
+    padding: 8px 12px !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+    color: var(--text-primary) !important;
+    font-size: 12.5px !important;
+}
+
+.connection-table tr:last-child td,
+.timing-table tr:last-child td {
+    border-bottom: none !important;
+}
+
+.connection-table td:first-child,
+.timing-table td:first-child {
+    color: var(--header-key) !important;
+    font-weight: 600 !important;
+    width: 180px !important;
+    font-family: var(--font-mono) !important;
+}
+
+dl.cert-attributes {
+    background-color: var(--surface-primary) !important;
+    border: 1px solid var(--border-default) !important;
+    border-radius: 6px !important;
+    padding: 10px 14px !important;
+    margin-bottom: 16px !important;
+}
+
+dl.cert-attributes dt {
+    color: var(--header-key) !important;
+    font-weight: 600 !important;
+    font-size: 12px !important;
+}
+
+dl.cert-attributes dd {
+    color: var(--text-primary) !important;
+    font-family: var(--font-mono) !important;
+    font-size: 12px !important;
+    margin-bottom: 6px !important;
+}
+
+/* ==========================================================================
+   6. BODY CONTENT VIEW & CODEMIRROR
+   ========================================================================== */
+
+.contentview {
+    background-color: transparent !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.contentview .controls {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-bottom: 8px !important;
+}
+
+.contentview .controls h5 {
+    color: var(--text-secondary) !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+
+.contentview pre,
+.CodeMirror {
+    background-color: var(--app-bg) !important;
+    border: 1px solid var(--border-default) !important;
+    border-radius: 6px !important;
+    color: var(--text-primary) !important;
+    font-family: var(--font-mono) !important;
+    font-size: 12.5px !important;
+    line-height: 1.55 !important;
+    padding: 8px !important;
+}
+
+.CodeMirror-gutters {
+    background-color: var(--surface-primary) !important;
+    border-right: 1px solid var(--border-default) !important;
+}
+
+.CodeMirror-linenumber {
+    color: var(--text-muted) !important;
+}
+
+.CodeMirror-cursor {
+    border-left: 2px solid var(--accent) !important;
+}
+
+/* Syntax Highlighting */
+.Token_Name_Tag { color: #ff7b72 !important; }
+.Token_Literal_String { color: #a5d6ff !important; }
+.Token_Literal_Number { color: #d2a8ff !important; }
+.Token_Keyword_Constant { color: #79c0ff !important; }
+
+/* ==========================================================================
+   7. INPUTS, SEARCH BAR & CONTROLS
+   ========================================================================== */
+
+/* Filter Input Group (Search / Filter in Flow Table) */
+.filter-input.input-group {
+    display: flex !important;
+    align-items: center !important;
+    background-color: var(--surface-primary) !important;
+    border: 1px solid var(--border-default) !important;
+    border-radius: 6px !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    height: 32px !important;
+    transition: all 0.15s ease !important;
+    margin: 6px 8px !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+.filter-input.input-group:focus-within {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 3px var(--accent-glow) !important;
+}
+
+.filter-input .input-group-addon {
+    background-color: transparent !important;
+    border: none !important;
+    color: var(--text-muted) !important;
+    padding: 0 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 100% !important;
+}
+
+.filter-input input.form-control {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: var(--text-primary) !important;
+    font-size: 12.5px !important;
+    height: 100% !important;
+    padding: 0 8px 0 0 !important;
+    width: 100% !important;
+}
+
+.filter-input input.form-control::placeholder {
+    color: var(--text-muted) !important;
+    opacity: 0.8 !important;
+}
+
+input, select, textarea, .form-control {
+    background-color: var(--panel-bg) !important;
+    border: 1px solid var(--border-default) !important;
+    color: var(--text-primary) !important;
+    border-radius: 6px !important;
+    padding: 5px 10px !important;
+    font-size: 13px !important;
+    outline: none !important;
+    transition: all 0.15s ease !important;
+}
+
+input:focus, .form-control:focus {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 3px var(--accent-glow) !important;
+}
+
+/* Generic Buttons */
+.btn-default, .btn-primary {
+    background-color: var(--surface-secondary) !important;
+    border: 1px solid var(--border-default) !important;
+    color: var(--text-primary) !important;
+    border-radius: 6px !important;
+    font-size: 12.5px !important;
+    font-weight: 500 !important;
+    padding: 5px 12px !important;
+    transition: all 0.15s ease !important;
+}
+
+.btn-default:hover, .btn-primary:hover {
+    background-color: var(--surface-active) !important;
+    border-color: var(--border-strong) !important;
+    color: var(--accent-hover) !important;
+}
+
+/* ==========================================================================
+   8. FOOTER STATUS BAR (REGION D)
+   ========================================================================== */
+
+footer {
+    background-color: var(--surface-primary) !important;
+    border-top: 1px solid var(--border-default) !important;
+    color: var(--text-muted) !important;
+    font-size: 11.5px !important;
+    font-family: var(--font-mono) !important;
+    padding: 0 14px !important;
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    gap: 12px !important;
+    box-shadow: none !important;
+    height: 28px !important;
+    flex-shrink: 0 !important;
+    user-select: none !important;
+    z-index: 20 !important;
+}
+
+footer .label, footer .label-default {
+    background-color: var(--surface-secondary) !important;
+    border: 1px solid var(--border-subtle) !important;
+    color: var(--text-secondary) !important;
+    border-radius: 4px !important;
+    font-weight: 500 !important;
+    font-size: 11px !important;
+    padding: 2px 8px !important;
+}
+
+/* Push rightmost status items (e.g. version) to the far right */
+footer > *:last-child {
+    margin-left: auto !important;
+}
+
+/* Event Log */
+.eventlog {
+    background-color: var(--surface-primary) !important;
+    border-top: 1px solid var(--border-default) !important;
+}
+
+.eventlog > div {
+    background-color: var(--surface-secondary) !important;
+    border-top: 1px solid var(--border-default) !important;
+    color: var(--text-secondary) !important;
+    padding: 4px 10px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+}
+
+.eventlog > pre {
+    background-color: var(--app-bg) !important;
+    color: var(--text-secondary) !important;
+    font-family: var(--font-mono) !important;
+    font-size: 12px !important;
+    border: none !important;
+    padding: 8px 12px !important;
+}
+
+/* ==========================================================================
+   9. DROPDOWNS & MODALS (OPTIONS EDITOR)
+   ========================================================================== */
+
+.dropdown-menu {
+    background-color: var(--surface-primary) !important;
+    border: 1px solid var(--border-default) !important;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6) !important;
+    border-radius: 8px !important;
+    padding: 4px !important;
+}
+
+.dropdown-menu > li > a {
+    color: var(--text-secondary) !important;
+    border-radius: 4px !important;
+    padding: 6px 12px !important;
+    font-size: 13px !important;
+}
+
+.dropdown-menu > li > a:hover {
+    background-color: var(--surface-secondary) !important;
+    color: var(--accent) !important;
+}
+
+/* Modal Dialog & Content */
+.modal-dialog {
+    margin: 30px auto !important;
+}
+
+.modal-content {
+    background-color: var(--surface-primary) !important;
+    border: 1px solid var(--border-default) !important;
+    color: var(--text-primary) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.75) !important;
+    overflow: hidden !important;
+}
+
+.modal-header {
+    background-color: var(--surface-secondary) !important;
+    border-bottom: 1px solid var(--border-default) !important;
+    padding: 12px 18px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+}
+
+.modal-header .modal-title h4 {
+    margin: 0 !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    color: var(--text-primary) !important;
+}
+
+.modal-header .close {
+    color: var(--text-muted) !important;
+    opacity: 0.8 !important;
+    text-shadow: none !important;
+    font-size: 18px !important;
+    transition: color 0.12s ease !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.modal-header .close:hover {
+    color: var(--status-error) !important;
+    opacity: 1 !important;
+}
+
+.modal-body {
+    background-color: var(--panel-bg) !important;
+    padding: 18px !important;
+    max-height: calc(85vh - 120px) !important;
+    overflow-y: auto !important;
+}
+
+.modal-body .form-group {
+    background-color: var(--surface-primary) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: 6px !important;
+    padding: 10px 14px !important;
+    margin-bottom: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    transition: border-color 0.12s ease !important;
+}
+
+.modal-body .form-group:hover {
+    border-color: var(--border-strong) !important;
+}
+
+.modal-body .form-group label {
+    color: var(--header-key) !important;
+    font-family: var(--font-mono) !important;
+    font-size: 12.5px !important;
+    font-weight: 600 !important;
+    margin: 0 0 4px 0 !important;
+}
+
+.modal-body .form-group .help-block {
+    color: var(--text-muted) !important;
+    font-size: 11.5px !important;
+    margin: 4px 0 0 0 !important;
+}
+
+.modal-footer {
+    background-color: var(--surface-secondary) !important;
+    border-top: 1px solid var(--border-subtle) !important;
+    padding: 12px 18px !important;
+}
+
+/* ==========================================================================
+   10. CUSTOM MODERN SCROLLBARS
+   ========================================================================== */
+
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--app-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-default);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--border-strong);
+}
+
+/* ==========================================================================
+   11. RESPONSIVE LAYOUT & SCALING ADAPTATIONS
+   ========================================================================== */
+
+/* Narrow desktop view (< 1366px) */
+@media (max-width: 1366px) {
+    .headers .kv-key,
+    .trailers .kv-key {
+        flex: 0 0 170px !important;
+        width: 170px !important;
+    }
+    
+    .menu-group {
+        padding: 0 6px !important;
+    }
+    
+    .menu-content > .btn,
+    .menu-content > a > .btn {
+        padding: 4px 6px !important;
+        font-size: 11px !important;
+    }
+}
+
+/* Ultra-wide desktop view (>= 1920px) */
+@media (min-width: 1920px) {
+    .headers .kv-key,
+    .trailers .kv-key {
+        flex: 0 0 240px !important;
+        width: 240px !important;
+    }
+}

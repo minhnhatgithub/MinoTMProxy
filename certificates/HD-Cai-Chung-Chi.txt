@@ -1,0 +1,37 @@
+================================================================================
+          HƯỚNG DẪN CÀI ĐẶT CHỨNG CHỈ SSL/CA CHO MINOTMPROXY
+================================================================================
+
+1. CÀI ĐẶT TRÊN ANDROID (KHÔNG ROOT - DÙNG CHO TRÌNH DUYỆT & APP THƯỜNG):
+   - Bước 1: Sau khi bật proxy vào MinoTMProxy, mở trình duyệt trên điện thoại
+             truy cập vào địa chỉ: http://mitm.it
+   - Bước 2: Chọn mục Android và tải file chứng chỉ về máy.
+   - Bước 3: Vào Cài đặt (Settings) -> Bảo mật (Security) -> Cài đặt nâng cao
+             -> Mã hóa & thông tin xác thực -> Cài đặt từ bộ nhớ
+             -> Chọn "Chứng chỉ CA" (CA certificate) -> Chọn "Vẫn cài đặt"
+             -> Chọn file vừa tải về.
+
+2. CÀI ĐẶT TRÊN ANDROID ĐÃ ROOT (BẮT 100% APP CẢ ANDROID 7, 8, 9, 10, 11, 12, 13, 14):
+   - Cách 1 (Dễ nhất): Cài Magisk Module "MagiskTrustUserCerts" hoặc "AlwaysTrustUserCerts",
+     sau đó chỉ cần cài chứng chỉ người dùng như Mục 1 ở trên, module sẽ tự chuyển
+     thành chứng chỉ hệ thống.
+   - Cách 2: Chạy file "scripts\Cai-Cert-Android-Root.bat" trong thư mục này
+     khi đã cắm cáp USB bật gỡ lỗi ADB.
+   - Nếu app có SSL Pinning: Cài thêm module LSPosed + module "TrustMeAlready"
+     hoặc dùng Frida bypass SSL Pinning.
+
+3. CÀI ĐẶT TRÊN IPHONE (iOS):
+   - Bước 1: Bật proxy trên iPhone theo IP máy tính, cổng 8080.
+   - Bước 2: Dùng Safari truy cập: http://mitm.it -> Chọn Apple.
+   - Bước 3: Vào Cài đặt -> Đã tải về hồ sơ -> Nhấn Cài đặt.
+   - Bước 4 (Bắt buộc): Vào Cài đặt -> Cài đặt chung -> Giới thiệu
+             -> Cài đặt tin cậy chứng nhận (Certificate Trust Settings)
+             -> Bật công tắc TIN CẬY TOÀN BỘ (Full Trust) cho mitmproxy.
+
+4. CÀI ĐẶT TRÊN WINDOWS PC:
+   - Nhấp đúp chuột vào file "certificates\mitmproxy-ca-cert.cer"
+   - Chọn "Install Certificate..." -> Chọn "Local Machine" (hoặc Current User)
+   - Chọn "Place all certificates in the following store"
+   - Nhấn Browse -> Chọn "Trusted Root Certification Authorities" (Cơ quan cấp chứng chỉ gốc đáng tin cậy)
+   - Nhấn Next -> Finish.
+================================================================================
