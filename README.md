@@ -34,7 +34,9 @@
 ```text
 MinoTMProxy/
 │
-├── Start-MinoTMProxy.bat       # [CLICK VÀO ĐÂY] Khởi động tool 1 chạm tự động hoàn toàn
+├── main.py                     # [KHUYÊN DÙNG] Khởi chạy trực tiếp bằng Python với Live Request Log siêu rõ ràng
+├── run.py                      # Alias ngắn gọn của main.py (python run.py)
+├── Start-MinoTMProxy.bat       # Khởi động tool 1 chạm bằng file .bat cho Windows
 ├── requirements.txt            # Khai báo thư viện mitmproxy
 ├── README.md                   # Hướng dẫn sử dụng chi tiết
 │
@@ -44,11 +46,16 @@ MinoTMProxy/
 │   ├── theme.js                # Xử lý đổi theme (Alt+T) và Resume All
 │   └── apply_theme.py          # Script tự động gắn theme vào mitmproxy
 │
-├── scripts/                    # Bộ công cụ hỗ trợ proxy nhanh
-│   ├── Bat-Proxy-Phone.bat     # Bật proxy trên điện thoại tự động qua ADB
-│   ├── Tat-Proxy-Phone.bat     # Tắt proxy trên điện thoại qua ADB
-│   ├── Bat-Proxy-Windows.bat   # Bật proxy hệ thống Windows
-│   ├── Tat-Proxy-Windows.bat   # Tắt proxy hệ thống Windows
+├── scripts/                    # Bộ công cụ hỗ trợ proxy nhanh (Python & BAT)
+│   ├── terminal_logger.py      # Bộ lọc in log request/response trực tiếp siêu rõ ràng trên console
+│   ├── Bat-Proxy-Phone.py      # Bật proxy trên điện thoại tự động qua ADB (Python)
+│   ├── Tat-Proxy-Phone.py      # Tắt proxy trên điện thoại qua ADB (Python)
+│   ├── Bat-Proxy-Windows.py    # Bật proxy hệ thống Windows (Python, áp dụng ngay tức thì)
+│   ├── Tat-Proxy-Windows.py    # Tắt proxy hệ thống Windows (Python)
+│   ├── Bat-Proxy-Phone.bat     # Bật proxy điện thoại (file .bat)
+│   ├── Tat-Proxy-Phone.bat     # Tắt proxy điện thoại (file .bat)
+│   ├── Bat-Proxy-Windows.bat   # Bật proxy Windows (file .bat)
+│   ├── Tat-Proxy-Windows.bat   # Tắt proxy Windows (file .bat)
 │   ├── Cai-Cert-Android-Root.bat # Cài chứng chỉ CA vào Android /system (Root)
 │   ├── get_ip.py               # Tự động dò IP LAN chính xác của máy tính
 │   └── sync_certs.py           # Tự động đồng bộ và nạp chứng chỉ CA qua ADB
@@ -64,33 +71,41 @@ MinoTMProxy/
 
 ## 🚀 Hướng dẫn sử dụng nhanh (Quick Start)
 
-### Bước 1: Khởi động công cụ
+### Cách 1: Khởi chạy bằng Python (Khuyên Dùng — Log CMD Siêu Rõ Ràng)
+Mở cửa sổ dòng lệnh và chạy:
+```bash
+python main.py
+# hoặc:
+python run.py
+```
+- Tool sẽ tự động nhận diện điện thoại Android cắm cáp USB (ADB) và tự động bật proxy.
+- Trình duyệt tự mở trang Web UI tại: **`http://127.0.0.1:8081/?token=123`** (Mật khẩu: `123`).
+- Toàn bộ request/response sẽ được **in trực tiếp theo thời gian thực (Live Request Log)** trên cửa sổ CMD cực kỳ rõ ràng, kèm thời gian, HTTP method, status code và URL!
+
+### Cách 2: Khởi chạy 1-Click bằng file `.bat`
 Nhấp đúp chuột vào file **`Start-MinoTMProxy.bat`**.
-- Tool sẽ tự động kiểm tra Python và mitmproxy.
-- Trình duyệt sẽ tự động mở trang quản lý traffic tại: **`http://127.0.0.1:8081/?token=123`**
-- Mật khẩu đăng nhập (nếu hỏi): `123`
-- Tool sẽ hiển thị rõ IP máy tính của bạn trong mạng LAN (ví dụ: `192.168.1.101`).
 
 ---
 
 ### Bước 2: Bắt gói tin trên Điện thoại (Android & iOS)
 
 #### 1. Đặt Proxy trên điện thoại:
-- **Cách tự động (Dành cho Android cắm cáp USB có bật ADB):**
-  - Chạy file `scripts\Bat-Proxy-Phone.bat` -> Xong ngay lập tức!
-- **Cách thủ công (Android & iPhone):**
+- **Tự động 100% (Android cắm cáp USB bật ADB):**
+  - Tool `main.py` sẽ **tự động nhận diện và cấu hình proxy qua USB** khi khởi động!
+  - Hoặc chạy riêng: `python scripts/Bat-Proxy-Phone.py`
+- **Cách thủ công qua Wi-Fi (Android & iPhone):**
   - Đảm bảo điện thoại và máy tính kết nối **chung một mạng Wi-Fi**.
-  - Vào **Cài đặt Wi-Fi** trên điện thoại -> Nhấn vào mạng Wi-Fi đang kết nối -> Chọn **Chỉnh sửa / Nâng cao**.
+  - Vào **Cài đặt Wi-Fi** trên điện thoại -> Chọn Wi-Fi đang dùng -> **Chỉnh sửa / Nâng cao**.
   - Phần **Proxy** chọn **Thủ công (Manual)**:
-    - **Tên máy chủ proxy (Host):** Nhập IP máy tính (được in trên cửa sổ tool, ví dụ: `192.168.1.101`).
+    - **Tên máy chủ proxy (Host):** Nhập IP máy tính (in trên cửa sổ tool, ví dụ: `192.168.1.14`).
     - **Cổng (Port):** `8080`.
   - Nhấn **Lưu**.
 
 #### 2. Cài đặt chứng chỉ SSL/HTTPS:
-- Sau khi đã kết nối Proxy, mở trình duyệt trên điện thoại truy cập vào: **`http://mitm.it`**
+- Mở trình duyệt trên điện thoại truy cập: **`http://mitm.it`**
 - Chọn hệ điều hành máy bạn (**Android** hoặc **Apple**):
-  - **Với iPhone:** Tải hồ sơ -> Vào Cài đặt -> Cài đặt hồ sơ -> Vào *Cài đặt chung > Giới thiệu > Cài đặt tin cậy chứng nhận* -> Bật công tắc **Tin cậy toàn bộ** cho mitmproxy.
-  - **Với Android thường:** Tải file `.cer` về -> Vào *Cài đặt > Bảo mật > Cài đặt nâng cao > Cài đặt từ bộ nhớ > Chứng chỉ CA* -> Chọn cài đặt file vừa tải.
+  - **Với iPhone:** Tải hồ sơ -> Vào Cài đặt -> Cài đặt hồ sơ -> Vào *Cài đặt chung > Giới thiệu > Cài đặt tin cậy chứng nhận* -> Bật **Tin cậy toàn bộ** cho mitmproxy.
+  - **Với Android thường:** Tải file `.cer` về -> Vào *Cài đặt > Bảo mật > Chứng chỉ CA* -> Cài đặt file vừa tải.
   - **Với Android đã Root (bắt 100% app không bị chặn SSL):** 
     - Chạy script `scripts\Cai-Cert-Android-Root.bat`.
     - Hoặc cài Magisk Module **MagiskTrustUserCerts** / **AlwaysTrustUserCerts**.
@@ -99,16 +114,16 @@ Nhấp đúp chuột vào file **`Start-MinoTMProxy.bat`**.
 ---
 
 ### Bước 3: Bắt gói tin trên Máy tính (Windows PC)
-- Muốn bắt request của trình duyệt hoặc các ứng dụng trên máy tính:
-  - Chạy file `scripts\Bat-Proxy-Windows.bat`.
+- Muốn bắt request từ trình duyệt hoặc ứng dụng trên máy tính:
+  - Chạy file: `python scripts/Bat-Proxy-Windows.py` (hoặc click `scripts\Bat-Proxy-Windows.bat`).
   - Cài đặt chứng chỉ gốc bằng cách nhấp đúp file `certificates\mitmproxy-ca-cert.cer` -> Cài vào mục **Trusted Root Certification Authorities**.
-- Khi xong việc, chỉ cần chạy file `scripts\Tat-Proxy-Windows.bat` để trở về mạng bình thường.
+- Khi xong việc, chỉ cần chạy: `python scripts/Tat-Proxy-Windows.py` (hoặc `scripts\Tat-Proxy-Windows.bat`).
 
 ---
 
 ## 🛠️ Quản lý & Tắt Proxy khi không sử dụng
-- **Tắt proxy trên điện thoại:** Chạy `scripts\Tat-Proxy-Phone.bat` hoặc chuyển proxy Wi-Fi về `None / Không có`.
-- **Dừng công cụ:** Đóng cửa sổ dòng lệnh `Start-MinoTMProxy.bat`.
+- **Tắt proxy trên điện thoại:** Chạy `python scripts/Tat-Proxy-Phone.py` (hoặc `scripts\Tat-Proxy-Phone.bat`).
+- **Dừng công cụ:** Nhấn **`Ctrl + C`** trên cửa sổ CMD. Tool sẽ tự động tắt proxy trên điện thoại trước khi thoát.
 
 ---
 
