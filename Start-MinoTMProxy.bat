@@ -95,7 +95,8 @@ echo.
 :: 5. Mở Web UI trên trình duyệt
 start http://127.0.0.1:8081/?token=123
 
-:: 6. Khởi động mitmweb
+:: 6. Khởi động mitmweb (Tự động giải phóng cổng 8080/8081 nếu còn tiến trình cũ)
+powershell -NoProfile -ExecutionPolicy Bypass -Command "try { Get-NetTCPConnection -LocalPort 8080,8081 -State Listen -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue } } catch {}; exit 0" >nul 2>&1
 "%MITM_CMD%" --web-host 127.0.0.1 --web-port 8081 --listen-host 0.0.0.0 --listen-port 8080 --set block_global=false --set web_password=123
 
 pause

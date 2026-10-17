@@ -48,31 +48,45 @@ def apply_theme():
     if os.path.exists(html_src):
         shutil.copy2(html_src, web_html)
 
-    # Patch CSP in app.py to allow fonts and inline styles
+    # Patch CSP in app.py to allow fonts and inline styles safely
     if os.path.exists(app_py):
+        app_orig = app_py + ".original"
+        if not os.path.exists(app_orig):
+            try:
+                shutil.copy2(app_py, app_orig)
+            except Exception:
+                pass
+
         with open(app_py, "r", encoding="utf-8") as f:
             code = f.read()
 
-        old_csp_pattern = re.compile(
-            r'self\.add_header\(\s*"Content-Security-Policy",\s*".*?"\s*\)',
-            re.DOTALL
-        )
-        new_csp = (
-            'self.add_header(\n'
-            '            "Content-Security-Policy",\n'
-            '            "default-src \'self\'; "\n'
-            '            "script-src \'self\' \'unsafe-inline\' \'unsafe-eval\'; "\n'
-            '            "connect-src \'self\' ws:; "\n'
-            '            "img-src \'self\' data: https:; "\n'
-            '            "style-src   \'self\' \'unsafe-inline\' https:; "\n'
-            '            "font-src    \'self\' data: https:;",\n'
-            '        )'
-        )
-        if old_csp_pattern.search(code):
-            code = old_csp_pattern.sub(new_csp, code)
-            with open(app_py, "w", encoding="utf-8") as f:
-                f.write(code)
-            print("[OK] Cap nhat Content-Security-Policy trong app.py thanh cong.")
+        # Self-healing safeguard: if app.py got corrupted previously (missing IndexHandler), restore it
+        if "IndexHandler" not in code and os.path.exists(app_orig):
+            shutil.copy2(app_orig, app_py)
+            with open(app_py, "r", encoding="utf-8") as f:
+                code = f.read()
+
+        # Only patch if font-src isn't already added
+        if "font-src" not in code:
+            csp_pattern = re.compile(
+                r'self\.add_header\(\s*"Content-Security-Policy",\s*(?:"[^"]*"\s*)+,?\s*\)'
+            )
+            new_csp = (
+                'self.add_header(\n'
+                '            "Content-Security-Policy",\n'
+                '            "default-src \'self\'; "\n'
+                '            "script-src \'self\' \'unsafe-inline\' \'unsafe-eval\'; "\n'
+                '            "connect-src \'self\' ws:; "\n'
+                '            "img-src \'self\' data: https:; "\n'
+                '            "style-src   \'self\' \'unsafe-inline\' https:; "\n'
+                '            "font-src    \'self\' data: https:;",\n'
+                '        )'
+            )
+            if csp_pattern.search(code):
+                code = csp_pattern.sub(new_csp, code)
+                with open(app_py, "w", encoding="utf-8") as f:
+                    f.write(code)
+                print("[OK] Cap nhat Content-Security-Policy trong app.py thanh cong.")
 
     print(f"[OK] Da ap dung giao dien Cyber & Light Mode thanh cong vao: {mitm_dir}")
     return True
